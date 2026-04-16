@@ -21,10 +21,12 @@ TOKEN = os.getenv("BOT_TOKEN")
 
 # Если знаешь свой chat_id, вставь сюда число.
 # Если пока не знаешь, оставь 0.
-ADMIN_CHAT_ID = 0
+ADMIN_CHAT_ID = int(os.getenv("ADMIN_CHAT_ID", "0"))
 
 ASK_NAME, ASK_PHONE, ASK_COMMENT = range(3)
 
+async def my_id(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text(f"Ваш chat_id: {update.effective_chat.id}")
 
 def main_menu():
     return ReplyKeyboardMarkup(
@@ -230,6 +232,7 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("help", help_command))
     app.add_handler(CommandHandler("services", services))
+    app.add_handler(CommandHandler("id", my_id))
     app.add_handler(request_handler)
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, text_router))
 
